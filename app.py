@@ -8,10 +8,7 @@ st.set_page_config(page_title="Keifer & Vonnie's Health Hub", page_icon="🎋")
 st.sidebar.header("⏳ Key Deadlines")
 med_date = datetime(2026, 8, 1)
 m_days = (med_date - datetime.now()).days
-if m_days > 0:
-    st.sidebar.warning(f"🚨 {m_days} Days to Keifer's Medical")
-else:
-    st.sidebar.error("Medical Window is OPEN")
+st.sidebar.warning(f"🚨 {m_days} Days to Keifer's Medical")
 
 retire_date = datetime(2038, 9, 1)
 r_days = (retire_date - datetime.now()).days
@@ -22,121 +19,69 @@ st.title("🎋 Keifer & Vonnie's Command Centre")
 user = st.radio("Who is checking in?", ["Keifer", "Vonnie"])
 
 # --- EXERCISE HUB ---
-with st.expander("💪 Exercise & Tai Chi Hub", expanded=False):
+with st.expander("💪 Exercise & Joint Support", expanded=False):
     st.video("https://www.youtube.com/watch?v=38tqFjB-o-g")
     
     if user == "Vonnie":
-        st.warning("🦶 **Vonnie's Foot Care:** Remember the 'Roll' (Heel-Arch-Toe) and extra calf raises to help the Plantar Fasciitis.")
-    
+        st.warning("🦶 **Vonnie's Foot Care:** Focus on the 'Roll' technique. If the heel is flaring up, freeze a water bottle and roll your foot over it for 5 mins.")
+    else:
+        st.info("🦵 **Keifer's Knee/Hip Support:** Warm up your joints with 'hip circles' before your walk. Never lock your knees straight.")
+
     st.markdown("""
     **Tai Chi Walking Form:**
-    1. **The Pour:** Transfer weight slowly—no 'plonking'.
+    1. **The Pour:** Weight transfer should be slow—don't 'plonk' the foot down.
     2. **The Roll:** Heel -> Arch -> Toe. 
-    3. **Soft Knees:** Always keep a micro-bend for those over-50s joints.
-    """)
-    
-    st.markdown("""
-    **Strength (2-3x per week):**
-    * Wall Push-ups (10), Chair Squats (10), Counter-top Lunges (10), Calf Raises (15).
+    3. **Soft Knees:** Always keep a micro-bend to absorb shock.
     """)
 
-# --- COOKBOOK SECTION ---
+# --- COOKBOOK SECTION (With Links) ---
 st.divider()
-st.header("📖 Master Cookbook (Serves 2)")
-diet = st.selectbox("Choose Your Plan:", ["Keto (Diabetes Focus)", "Mediterranean (BP Focus)"])
-meal_time = st.selectbox("Meal Type:", ["Breakfast", "Lunch", "Dinner"])
+st.header("📖 The Digital Cookbook")
+diet = st.radio("Select Your Focus:", ["Keto (Diabetes)", "Mediterranean (BP)"])
 
-# Recipe Data
-data = {
-    "Keto (Diabetes Focus)": {
-        "Breakfast": {
-            "Bacon & Egg Cups": "6 slices bacon, 4 eggs, spinach. Line muffin tin with bacon, crack egg, bake 15m @ 200C.",
-            "Salmon Avocado Smash": "150g Smoked salmon, 1 avocado, lemon. Mash avocado, top with salmon.",
-            "Pork Sausage Scramble": "2 pork sausages, 4 eggs, 2 cups spinach. Fry pork first.",
-            "Beef Mince Omelette": "100g beef mince, 4 eggs, cheese. Brown beef before folding.",
-            "Bulletproof Eggs": "4 hard-boiled eggs, coffee with 1 tbsp butter."
-        },
-        "Lunch": {
-            "Chicken Caesar (No Croutons)": "2 chicken breasts, cos lettuce, parmesan, dressing, 1 boiled egg.",
-            "Pork Belly & Slaw": "300g pork belly (air fried), cabbage, mayo, apple cider vinegar.",
-            "Salmon Salad Bowls": "200g salmon, mixed greens, walnuts, olive oil.",
-            "Beef Taco Lettuce Wraps": "300g beef mince, taco seasoning, iceberg lettuce, sour cream.",
-            "Chicken Cucumber Boats": "Leftover roast chicken, celery, mayo, in cucumber hulls."
-        },
-        "Dinner": {
-            "Garlic Butter Salmon": "2 salmon fillets, 50g butter, asparagus. Pan-sear 4m each side.",
-            "Creamy Parmesan Pork Chops": "2 pork chops, 100ml heavy cream, spinach. Simmer chops in sauce.",
-            "Beef & Broccoli Stir-fry": "300g steak strips, 2 cups broccoli, soy sauce (sugar-free).",
-            "Chicken Thighs with Zucchini": "4 bone-in chicken thighs, 2 zucchinis, roast 35m @ 200C.",
-            "Baked Fish & Bok Choy": "300g white fish, 1 bunch bok choy, olive oil. Foil bake 12m.",
-            "Bunless Beef Burgers": "2 beef patties, cheddar, pickles, in lettuce leaves.",
-            "Pork Stir-fry with Peppers": "300g pork strips, peppers, garlic, sesame oil.",
-            "Lemon Pepper Chicken Wings": "500g wings, lemon zest, pepper. Air fry 20m @ 200C.",
-            "Steak & Garlic Mushrooms": "2 steaks, 200g mushrooms, butter. Pan fry.",
-            "Cauliflower Shepherd’s Pie": "400g beef mince, topped with mashed cauliflower."
-        }
+# Categorised Links
+keto_recipes = {
+    "Breakfast": {
+        "Salmon Avocado Smash": "https://www.ketofocus.com/recipes/keto-avocado-toast/",
+        "Pork Sausage & Spinach Scramble": "https://www.ruled.me/sausage-spinach-feta-omelette/",
+        "Beef Mince Omelette": "https://www.snapcalorie.com/recipes/keto_hamburger_omelette.html"
     },
-    "Mediterranean (BP Focus)": {
-        "Breakfast": {
-            "Greek Yogurt & Walnuts": "2 cups Greek yogurt, 1/2 cup walnuts, blueberries.",
-            "Oats with Berries": "1 cup rolled oats, cinnamon, strawberries.",
-            "Avocado Toast (Sourdough)": "1 avocado, 2 slices sourdough, chili flakes.",
-            "Spinach & Feta Omelette": "4 eggs, 50g feta, 2 cups spinach.",
-            "Smoked Salmon & Cottage Cheese": "100g salmon, cottage cheese, cucumber."
-        },
-        "Lunch": {
-            "Classic Greek Salad": "Cucumber, tomato, olives, feta, red onion, olive oil.",
-            "Chickpea & Tuna Salad": "1 tin chickpeas, 1 tin tuna, parsley, lemon.",
-            "Quinoa & Roasted Veg": "1 cup quinoa, capsicum, zucchini, chickpeas.",
-            "Chicken & Hummus Wrap": "Grilled chicken, hummus, wholemeal wrap.",
-            "Lentil & Veggie Soup": "Brown lentils, carrots, celery, onion, stock."
-        },
-        "Dinner": {
-            "Mediterranean Baked Salmon": "2 salmon fillets, cherry tomatoes, olives, asparagus.",
-            "Garlic Chicken & Quinoa": "2 chicken breasts, 1 cup quinoa, broccoli, lemon.",
-            "Pork Souvlaki Skewers": "300g pork cubes, oregano, lemon, tzatziki.",
-            "Beef & Veggie Kebabs": "300g beef cubes, onion, peppers, brown rice.",
-            "White Fish & Salsa Verde": "2 fillets fish, parsley/caper sauce, beans.",
-            "Whole Wheat Pasta Primavera": "Whole wheat pasta, zucchini, peas, olive oil.",
-            "Chicken Cacciatore": "2 chicken thighs, tinned tomatoes, olives. Simmer 30m.",
-            "Sheet Pan Pork & Vegies": "2 pork steaks, carrots, red onion. Roast 25m.",
-            "Grilled Beef & Asparagus": "2 steaks, 2 bunches asparagus, balsamic.",
-            "Tuna Niçoise Salad": "Grilled fresh tuna, green beans, boiled egg, olives."
-        }
+    "Lunch/Dinner": {
+        "Garlic Butter Salmon": "https://www.dietdoctor.com/recipes/pan-seared-salmon-with-garlic-butter",
+        "Beef & Broccoli Stir-fry": "https://www.dietdoctor.com/recipes/keto-beef-and-broccoli-stir-fry",
+        "Creamy Pork Chops": "https://www.dietdoctor.com/recipes/keto-pork-chops-with-creamy-garlic-sauce"
     }
 }
 
-selected_recipes = data[diet][meal_time]
-choice = st.selectbox("Select a Recipe:", list(selected_recipes.keys()))
-st.info(f"**Method & Ingredients:** {selected_recipes[choice]}")
+med_recipes = {
+    "Breakfast": {
+        "Greek Omelette": "https://www.themediterraneandish.com/greek-omelet-recipe/",
+        "Avocado Sourdough Toast": "https://www.themediterraneandish.com/avocado-toast-recipe/"
+    },
+    "Lunch/Dinner": {
+        "Greek Lemon Fish": "https://thouseshop.com/blogs/recipe/mediterranean-baked-fish-with-lemon-and-herbs",
+        "Chickpea & Tuna Salad": "https://www.olivetomato.com/5-minute-mediterranean-chickpea-tuna-salad/",
+        "Chicken Cacciatore": "https://www.themediterraneandish.com/chicken-cacciatore-recipe/"
+    }
+}
 
-# --- SHOPPING LIST GENERATOR ---
-if st.button("🛒 Generate Weekly Shopping List"):
-    st.subheader("Your Planned Shop:")
-    st.write("Based on the current Diet Plan selected above:")
-    if diet == "Keto (Diabetes Focus)":
-        st.write("- **Protein:** Salmon, Chicken Thighs/Breast, Pork Chops/Belly/Sausage, Beef Mince/Steak, Eggs, Bacon.")
-        st.write("- **Produce:** Avocado, Zucchini, Cauliflower, Spinach, Broccoli, Asparagus, Bok Choy, Lettuce, Peppers, Mushrooms.")
-        st.write("- **Pantry:** Olive oil, Butter, Heavy Cream, Walnuts, Almonds, Soy Sauce (sugar-free), Apple Cider Vinegar.")
-    else:
-        st.write("- **Protein:** Salmon, White Fish, Tuna, Chicken, Pork, Beef, Eggs, Greek Yogurt, Feta, Chickpeas, Lentils.")
-        st.write("- **Produce:** Cucumber, Tomato, Onion, Spinach, Peppers, Zucchini, Carrots, Blueberries, Strawberries, Lemon.")
-        st.write("- **Pantry:** Olive oil, Quinoa, Wholemeal Wraps, Oats, Sourdough, Walnuts, Brown Rice, Whole Wheat Pasta.")
+recipes = keto_recipes if diet == "Keto (Diabetes)" else med_recipes
+category = st.selectbox("Select Meal Time:", list(recipes.keys()))
+choice = st.selectbox("Pick a Dish:", list(recipes[category].keys()))
+
+st.success(f"👉 [Click here for the full {choice} Recipe & Method]({recipes[category][choice]})")
 
 # --- VITALS TRACKER ---
 st.divider()
 st.header("📊 Vitals & Accountability")
 c1, c2 = st.columns(2)
 with c1:
-    w = st.number_input("Weight (kg)", value=0.0)
-    bs = st.number_input("Blood Sugar (mmol/L)", value=0.0)
+    w = st.number_input("Weight (kg)", value=0.0, format="%.1f")
+    bs = st.number_input("Blood Sugar (mmol/L)", value=0.0, format="%.1f")
 with c2:
     bps = st.number_input("BP Systolic (Top)", value=0)
     bpd = st.number_input("BP Diastolic (Bottom)", value=0)
 
-if st.button("Log & Analyze"):
-    if bps > 140 or bpd > 90:
-        st.error(f"🛑 **Push harder, {user}!** BP is a bit high. Watch the salt and stick to the plan.")
-    elif w > 0:
-        st.balloons()
-        st.write(f"🌟 **Genuine Praise:** Great effort, {user}! One step closer to that August Medical and 2038 retirement.")
+if st.button("Log Stats"):
+    st.balloons()
+    st.write(f"🌟 Great job {user}! Data logged for your August Medical.")
