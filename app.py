@@ -20,18 +20,24 @@ st.sidebar.warning(f"🚨 {m_days} Days to Keifer's Medical")
 st.title("🎋 Keifer & Vonnie's Command Centre")
 user = st.radio("Who is checking in?", ["Keifer", "Vonnie"])
 
-# --- EXERCISE HUB ---
+# --- EXERCISE HUB (Tai Chi + Resistance) ---
 st.divider()
 st.header("💪 Exercise & Joint Support")
-with st.expander("🧘 Tai Chi Walking & Home Strength"):
+with st.expander("🧘 Tai Chi Walking & Home Strength Routine"):
+    st.subheader("1. Tai Chi Focus")
     st.video("https://www.youtube.com/watch?v=38tqFjB-o-g")
     if user == "Vonnie":
         st.warning("🦶 **Vonnie's Foot Care:** Focus on the 'Roll' (Heel-Arch-Toe). Calf raises are your best friend today!")
+    
+    st.subheader("2. Home Resistance Circuit")
     st.markdown("""
-    **Routine (2-3x per week):**
-    1. **Wall Push-ups:** 10 reps (Shoulder friendly).
-    2. **Chair Squats:** 10 reps (No hands!).
-    3. **Calf Raises:** 15 reps (Essential for Plantar Fasciitis).
+    **Perform this circuit 2-3 times per week to build muscle for the medical:**
+    
+    * **Wall Push-ups (Chest/Arms):** Stand arm's length from a wall. Place hands flat. Lower your chest toward the wall and push back. *Easier on shoulders than floor push-ups.*
+    * **Chair Squats (Legs/Glutes):** Stand in front of a sturdy chair. Lower your hips until you just touch the seat, then stand back up. *No hands if you can!*
+    * **Calf Raises (Lower Leg/Foot Health):** Hold a wall for balance. Rise onto your toes, hold for 1 second, then lower. *Crucial for Vonnie's plantar fasciitis.*
+    * **Counter-top Rows (Back):** Hold the edge of a heavy table or kitchen counter. Lean back slightly with straight arms, then pull your chest toward the counter.
+    * **The 'Medical Walk':** 10 minutes of brisk walking, focusing on deep breathing and upright posture.
     """)
 
 # --- THE FAMILY VAULT (Custom Recipes) ---
