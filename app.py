@@ -5,10 +5,9 @@ from datetime import datetime
 st.set_page_config(page_title="Keifer & Vonnie's Health Hub", page_icon="🎋")
 
 # --- 1. THE SMART INGREDIENT ENGINE ---
-# Mapping the 60 recipes to their core ingredients for the shopping list
 ingredients_map = {
     # KETO BREAKFAST
-    "Bacon & Egg Cups": ["Bacon", "Eggs", "Salt/Pepper"],
+    "Bacon & Egg Cups": ["Bacon", "Eggs", "Salt", "Pepper"],
     "Salmon Avocado Smash": ["Smoked Salmon", "Avocado", "Lemon", "Low-carb bread"],
     "Pork Sausage Scramble": ["Pork Sausages", "Eggs", "Spinach"],
     "Beef Mince Omelette": ["Beef Mince", "Eggs", "Onion", "Cheese"],
@@ -21,14 +20,14 @@ ingredients_map = {
     # KETO LUNCH
     "Chicken Caesar": ["Chicken Breast", "Cos Lettuce", "Parmesan", "Caesar Dressing"],
     "Pork Belly Slaw": ["Pork Belly", "Cabbage", "Mayo", "Apple Cider Vinegar"],
-    "Beef Taco Wraps": ["Beef Mince", "Lettuce (wraps)", "Taco Spice", "Sour Cream"],
+    "Beef Taco Wraps": ["Beef Mince", "Lettuce", "Taco Spice", "Sour Cream"],
     "Salmon Salad Bowls": ["Salmon", "Mixed Greens", "Cucumber", "Olive Oil"],
     "Bunless Burgers": ["Beef Patties", "Lettuce", "Tomato", "Cheese", "Pickles"],
     "Chicken Cucumber Boats": ["Chicken", "Cucumbers", "Mayo", "Dill"],
     "Cold Pork Roast": ["Pork Roast", "Mustard"],
-    "Beef Meatballs": ["Beef Mince", "Parmesan", "Garlic", "Zucchini Noodles"],
+    "Beef Meatballs": ["Beef Mince", "Parmesan", "Garlic", "Zucchini"],
     "Tuna Avocado Salad": ["Canned Tuna", "Avocado", "Red Onion"],
-    "Pork Rind Chicken": ["Chicken Thighs", "Pork Rinds (crushed)", "Egg wash"],
+    "Pork Rind Chicken": ["Chicken Thighs", "Pork Rinds", "Eggs"],
     # KETO DINNER
     "Garlic Butter Salmon": ["Salmon Fillets", "Butter", "Garlic", "Asparagus"],
     "Beef & Broccoli": ["Beef Strips", "Broccoli", "Soy Sauce", "Ginger"],
@@ -38,7 +37,7 @@ ingredients_map = {
     "Pork Stir-fry": ["Pork Strips", "Capsicum", "Soy Sauce", "Sesame Oil"],
     "Steak & Mushrooms": ["Steak", "Mushrooms", "Butter", "Garlic"],
     "Lemon Pepper Wings": ["Chicken Wings", "Lemon", "Black Pepper"],
-    "Shepherd’s Pie": ["Beef Mince", "Cauliflower (for mash)", "Onion", "Beef Stock"],
+    "Shepherd’s Pie": ["Beef Mince", "Cauliflower", "Onion", "Beef Stock"],
     "Pork Loin Roast": ["Pork Loin", "Garlic", "Rosemary", "Green Beans"],
     # MEDITERRANEAN BREAKFAST
     "Greek Omelette": ["Eggs", "Feta", "Spinach", "Olives"],
@@ -66,7 +65,7 @@ ingredients_map = {
     "Greek Lemon Fish": ["White Fish Fillets", "Lemon", "Oregano", "Olive Oil", "Potatoes"],
     "Chicken Cacciatore": ["Chicken Thighs", "Canned Tomatoes", "Capsicum", "Mushrooms"],
     "Baked Salmon": ["Salmon Fillets", "Lemon", "Dill", "Asparagus"],
-    "Pork Souvlaki": ["Pork Cubes", "Lemon", "Garlic", "Greek Salad ingredients"],
+    "Pork Souvlaki": ["Pork Cubes", "Lemon", "Garlic", "Greek Salad"],
     "Beef & Veg Kebabs": ["Beef Cubes", "Zucchini", "Capsicum", "Onion"],
     "Garlic Chicken": ["Chicken Breast", "Garlic", "Olive Oil", "Green Beans"],
     "Pasta Primavera": ["Whole Wheat Pasta", "Zucchini", "Peas", "Parmesan"],
@@ -96,14 +95,8 @@ st.divider()
 st.header("💪 Exercise & Joint Support")
 with st.expander("🧘 Tai Chi & Resistance Training"):
     st.subheader("1. Tai Chi Walking (Manual Guide)")
-    st.markdown("""
-    **The 'Heel-to-Toe' Roll:**
-    1. Lift foot, place **heel** down lightly (weight on back leg).
-    2. Roll weight forward through **arch** to the **ball** of the foot.
-    3. Gently push off. *Great for Vonnie's foot recovery.*
-    """)
+    st.markdown("**The 'Heel-to-Toe' Roll:** Lift heel, roll to arch, ball of foot. Breathe deeply.")
     st.video("https://www.youtube.com/watch?v=38tqFjB-o-g")
-
     st.subheader("2. Daily Strength Checklist")
     col_a, col_b = st.columns(2)
     with col_a:
@@ -127,7 +120,6 @@ with st.expander("➕ Add a New Recipe"):
 st.divider()
 st.header("📅 Smart Weekly Planner")
 days = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"]
-# Combine all possible recipes into one list for the dropdowns
 all_options = ["None"] + sorted(list(ingredients_map.keys())) + sorted(list(st.session_state['custom_recipes'].keys()))
 
 planned_meals = {}
@@ -155,12 +147,15 @@ if st.button("🚀 Generate 'Our Groceries' List"):
                 for item in ingredients_map[meal]:
                     shopping_set.add(item)
             elif meal in st.session_state['custom_recipes']:
-                shopping_set.add(f"Check Vault for: {meal}")
+                shopping_set.add(meal)
     
     st.subheader("Your Copy-Paste List")
     final_list = sorted([i for i in shopping_set if i != "None"])
-    st.code("\n".join(final_list))
-    st.success("Paste this into the 'Our Groceries' app!")
+    
+    # FORMATTING CHANGE: Comma separated list for Our Groceries
+    comma_list = ", ".join(final_list)
+    st.text_area("Copy this text:", value=comma_list, height=100)
+    st.info("💡 **Partner's Tip:** Copy the text in the box above. In 'Our Groceries', tap '+', paste this whole string, and hit 'Add' or 'Enter'. It should split them by the commas!")
 
 # --- 9. VITALS TRACKER ---
 st.divider()
@@ -174,4 +169,4 @@ with c2:
 
 if st.button("Log Stats"):
     st.balloons()
-    st.write(f"🌟 Data captured for {user}. Let's stay on track!")
+    st.write(f"🌟 Data captured for {user}. Good job!")
