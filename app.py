@@ -2,7 +2,7 @@ import streamlit as st
 import pandas as pd
 from datetime import datetime
 
-st.set_page_config(page_title="Keifer & Partner's Health Hub", page_icon="🎋")
+st.set_page_config(page_title="Keifer & Vonnie's Health Hub", page_icon="🎋")
 
 # --- INITIALISE MEMORY ---
 if 'custom_recipes' not in st.session_state:
@@ -17,16 +17,16 @@ m_days = (med_date - datetime.now()).days
 st.sidebar.warning(f"🚨 {m_days} Days to Keifer's Medical")
 
 # --- MAIN INTERFACE ---
-st.title("🎋 Keifer & Partner's Command Centre")
-user = st.radio("Who is checking in?", ["Keifer", "Your Partner"])
+st.title("🎋 Keifer & Vonnie's Command Centre")
+user = st.radio("Who is checking in?", ["Keifer", "Vonnie"])
 
 # --- EXERCISE HUB ---
 st.divider()
 st.header("💪 Exercise & Joint Support")
 with st.expander("🧘 Tai Chi Walking & Home Strength"):
     st.video("https://www.youtube.com/watch?v=38tqFjB-o-g")
-    if user == "Your Partner":
-        st.warning("🦶 **Partner's Foot Care:** Focus on the 'Roll' (Heel-Arch-Toe). Calf raises are your best friend today!")
+    if user == "Vonnie":
+        st.warning("🦶 **Vonnie's Foot Care:** Focus on the 'Roll' (Heel-Arch-Toe). Calf raises are your best friend today!")
     st.markdown("""
     **Routine (2-3x per week):**
     1. **Wall Push-ups:** 10 reps (Shoulder friendly).
@@ -37,6 +37,7 @@ with st.expander("🧘 Tai Chi Walking & Home Strength"):
 # --- THE FAMILY VAULT (Custom Recipes) ---
 st.divider()
 st.header("🍯 The Family Vault")
+st.write(f"Add your own 'House Favourites' here, {user}.")
 with st.expander("➕ Add a New Recipe"):
     new_name = st.text_input("Recipe Name")
     new_method = st.text_area("Paste Ingredients/Method or Website Link here")
@@ -69,8 +70,9 @@ sun = st.text_input("Sun Dinner")
 if st.button("🚀 Generate 'Our Groceries' List"):
     full_list = st.session_state['essentials'] + [mon, tue, wed, thu, fri, sat, sun]
     clean_list = [item for item in full_list if item.strip()]
+    st.subheader("Your Shopping List")
     st.code("\n".join(clean_list))
-    st.success("Copy the list above and paste into 'Our Groceries'!")
+    st.success("Copy the list above and paste it into 'Our Groceries'!")
 
 # --- MASTER COOKBOOK ---
 st.divider()
