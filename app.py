@@ -4,123 +4,165 @@ from datetime import datetime
 
 st.set_page_config(page_title="Keifer & Vonnie's Health Hub", page_icon="🎋")
 
-# --- INITIALISE MEMORY ---
+# --- 1. THE SMART INGREDIENT ENGINE ---
+# Mapping the 60 recipes to their core ingredients for the shopping list
+ingredients_map = {
+    # KETO BREAKFAST
+    "Bacon & Egg Cups": ["Bacon", "Eggs", "Salt/Pepper"],
+    "Salmon Avocado Smash": ["Smoked Salmon", "Avocado", "Lemon", "Low-carb bread"],
+    "Pork Sausage Scramble": ["Pork Sausages", "Eggs", "Spinach"],
+    "Beef Mince Omelette": ["Beef Mince", "Eggs", "Onion", "Cheese"],
+    "Steak and Eggs": ["Steak", "Eggs", "Butter"],
+    "Pork Belly & Eggs": ["Pork Belly", "Eggs"],
+    "Bulletproof Coffee": ["Coffee Beans", "Grass-fed Butter", "MCT Oil"],
+    "Chicken Frittata": ["Chicken", "Eggs", "Spinach", "Feta"],
+    "Smoked Salmon Scramble": ["Smoked Salmon", "Eggs", "Cream Cheese"],
+    "Ham & Cheese Muffins": ["Ham", "Eggs", "Cheese"],
+    # KETO LUNCH
+    "Chicken Caesar": ["Chicken Breast", "Cos Lettuce", "Parmesan", "Caesar Dressing"],
+    "Pork Belly Slaw": ["Pork Belly", "Cabbage", "Mayo", "Apple Cider Vinegar"],
+    "Beef Taco Wraps": ["Beef Mince", "Lettuce (wraps)", "Taco Spice", "Sour Cream"],
+    "Salmon Salad Bowls": ["Salmon", "Mixed Greens", "Cucumber", "Olive Oil"],
+    "Bunless Burgers": ["Beef Patties", "Lettuce", "Tomato", "Cheese", "Pickles"],
+    "Chicken Cucumber Boats": ["Chicken", "Cucumbers", "Mayo", "Dill"],
+    "Cold Pork Roast": ["Pork Roast", "Mustard"],
+    "Beef Meatballs": ["Beef Mince", "Parmesan", "Garlic", "Zucchini Noodles"],
+    "Tuna Avocado Salad": ["Canned Tuna", "Avocado", "Red Onion"],
+    "Pork Rind Chicken": ["Chicken Thighs", "Pork Rinds (crushed)", "Egg wash"],
+    # KETO DINNER
+    "Garlic Butter Salmon": ["Salmon Fillets", "Butter", "Garlic", "Asparagus"],
+    "Beef & Broccoli": ["Beef Strips", "Broccoli", "Soy Sauce", "Ginger"],
+    "Parmesan Pork Chops": ["Pork Chops", "Parmesan", "Garlic", "Heavy Cream"],
+    "Chicken Thighs": ["Chicken Thighs", "Zucchini", "Lemon", "Thyme"],
+    "Baked White Fish": ["White Fish Fillets", "Butter", "Lemon", "Parsley"],
+    "Pork Stir-fry": ["Pork Strips", "Capsicum", "Soy Sauce", "Sesame Oil"],
+    "Steak & Mushrooms": ["Steak", "Mushrooms", "Butter", "Garlic"],
+    "Lemon Pepper Wings": ["Chicken Wings", "Lemon", "Black Pepper"],
+    "Shepherd’s Pie": ["Beef Mince", "Cauliflower (for mash)", "Onion", "Beef Stock"],
+    "Pork Loin Roast": ["Pork Loin", "Garlic", "Rosemary", "Green Beans"],
+    # MEDITERRANEAN BREAKFAST
+    "Greek Omelette": ["Eggs", "Feta", "Spinach", "Olives"],
+    "Avocado Sourdough": ["Avocado", "Sourdough Bread", "Chilli Flakes"],
+    "Yogurt & Walnuts": ["Greek Yogurt", "Walnuts", "Honey"],
+    "Berry Oats": ["Rolled Oats", "Mixed Berries", "Almond Milk"],
+    "Salmon & Feta": ["Smoked Salmon", "Feta", "Whole Grain Toast"],
+    "Spinach Frittata": ["Eggs", "Spinach", "Onion", "Olive Oil"],
+    "Whole Wheat Pancakes": ["Whole Wheat Flour", "Eggs", "Milk", "Blueberries"],
+    "Chickpea Hash": ["Canned Chickpeas", "Onion", "Capsicum", "Poached Egg"],
+    "Poached Eggs": ["Eggs", "Whole Grain Toast", "Tomato"],
+    "Cottage Cheese & Cucumber": ["Cottage Cheese", "Cucumber", "Walnuts"],
+    # MEDITERRANEAN LUNCH
+    "Chickpea Tuna Salad": ["Canned Tuna", "Canned Chickpeas", "Red Onion", "Lemon"],
+    "Classic Greek Salad": ["Cucumber", "Tomato", "Feta", "Olives", "Red Onion"],
+    "Chicken Hummus Wrap": ["Chicken", "Hummus", "Whole Wheat Wrap", "Cucumber"],
+    "Quinoa Salad": ["Quinoa", "Cucumber", "Tomato", "Feta", "Parsley"],
+    "Lentil Soup": ["Canned Lentils", "Carrots", "Onion", "Celery", "Tomato Paste"],
+    "Salmon Souvlaki": ["Salmon", "Mixed Greens", "Tzatziki", "Lemon"],
+    "Beef Skewers": ["Beef Cubes", "Capsicum", "Onion", "Olive Oil"],
+    "Pork Wraps": ["Pork Strips", "Whole Wheat Wrap", "Tzatziki", "Tomato"],
+    "Quinoa Tabbouleh": ["Quinoa", "Parsley", "Mint", "Tomato", "Lemon"],
+    "Tuna Salad (No Mayo)": ["Canned Tuna", "Olive Oil", "Celery", "Red Onion"],
+    # MEDITERRANEAN DINNER
+    "Greek Lemon Fish": ["White Fish Fillets", "Lemon", "Oregano", "Olive Oil", "Potatoes"],
+    "Chicken Cacciatore": ["Chicken Thighs", "Canned Tomatoes", "Capsicum", "Mushrooms"],
+    "Baked Salmon": ["Salmon Fillets", "Lemon", "Dill", "Asparagus"],
+    "Pork Souvlaki": ["Pork Cubes", "Lemon", "Garlic", "Greek Salad ingredients"],
+    "Beef & Veg Kebabs": ["Beef Cubes", "Zucchini", "Capsicum", "Onion"],
+    "Garlic Chicken": ["Chicken Breast", "Garlic", "Olive Oil", "Green Beans"],
+    "Pasta Primavera": ["Whole Wheat Pasta", "Zucchini", "Peas", "Parmesan"],
+    "Sheet Pan Pork": ["Pork Chops", "Sweet Potato", "Broccoli"],
+    "Grilled Beef": ["Steak", "Asparagus", "Olive Oil"],
+    "Tuna Niçoise": ["Canned Tuna", "Green Beans", "Boiled Egg", "Potatoes", "Olives"]
+}
+
+# --- 2. INITIALISE MEMORY ---
 if 'custom_recipes' not in st.session_state:
     st.session_state['custom_recipes'] = {}
 if 'essentials' not in st.session_state:
     st.session_state['essentials'] = ["Milk", "Butter", "Coffee", "Water", "Toilet Paper", "Bread"]
 
-# --- SIDEBAR ---
+# --- 3. SIDEBAR ---
 st.sidebar.header("⏳ Key Deadlines")
 med_date = datetime(2026, 8, 1)
 m_days = (med_date - datetime.now()).days
 st.sidebar.warning(f"🚨 {m_days} Days to Keifer's Medical")
 
-# --- MAIN INTERFACE ---
+# --- 4. MAIN INTERFACE ---
 st.title("🎋 Keifer & Vonnie's Command Centre")
 user = st.radio("Who is checking in?", ["Keifer", "Vonnie"])
 
-# --- EXERCISE HUB (Tai Chi + Resistance) ---
+# --- 5. EXERCISE HUB ---
 st.divider()
 st.header("💪 Exercise & Joint Support")
 with st.expander("🧘 Tai Chi & Resistance Training"):
-    
     st.subheader("1. Tai Chi Walking (Manual Guide)")
     st.markdown("""
     **The 'Heel-to-Toe' Roll:**
-    * **Step 1:** Lift one foot and place the **heel** down lightly. Keep your weight on the back leg.
-    * **Step 2:** Slowly shift your weight forward, rolling through the **arch** to the **ball** of the foot.
-    * **Step 3:** Push off gently with the back foot. 
-    * *Note: This reduces impact on the joints and is excellent for Vonnie's foot recovery.*
+    1. Lift foot, place **heel** down lightly (weight on back leg).
+    2. Roll weight forward through **arch** to the **ball** of the foot.
+    3. Gently push off. *Great for Vonnie's foot recovery.*
     """)
     st.video("https://www.youtube.com/watch?v=38tqFjB-o-g")
 
     st.subheader("2. Daily Strength Checklist")
-    st.write("Complete these moves 2-3 times per week:")
-    
     col_a, col_b = st.columns(2)
     with col_a:
-        ex1 = st.checkbox("Wall Push-ups (10 reps)")
-        ex2 = st.checkbox("Chair Squats (10 reps)")
+        ex1, ex2 = st.checkbox("Wall Push-ups (10)"), st.checkbox("Chair Squats (10)")
     with col_b:
-        ex3 = st.checkbox("Calf Raises (15 reps)")
-        ex4 = st.checkbox("Counter-top Rows (10 reps)")
-    
-    if ex1 and ex2 and ex3 and ex4:
-        st.success("🔥 Full Circuit Complete! Nice work!")
+        ex3, ex4 = st.checkbox("Calf Raises (15)"), st.checkbox("Counter Rows (10)")
+    if ex1 and ex2 and ex3 and ex4: st.success("🔥 Full Circuit Complete!")
 
-    st.markdown("""
-    **Exercise Descriptions:**
-    * **Wall Push-ups:** Hands flat on wall, lower chest, push back.
-    * **Chair Squats:** Sit-to-stand from a sturdy chair without using hands.
-    * **Calf Raises:** Rise onto toes while holding a wall for balance.
-    * **Counter Rows:** Pull your chest toward the kitchen counter edge while leaning back.
-    """)
-
-# --- THE FAMILY VAULT (Custom Recipes) ---
+# --- 6. THE FAMILY VAULT ---
 st.divider()
 st.header("🍯 The Family Vault")
-st.write(f"Add your own 'House Favourites' here, {user}.")
 with st.expander("➕ Add a New Recipe"):
     new_name = st.text_input("Recipe Name")
-    new_method = st.text_area("Paste Ingredients/Method or Website Link here")
+    new_method = st.text_area("Paste Ingredients/Method")
     if st.button("Save to Vault"):
         if new_name and new_method:
             st.session_state['custom_recipes'][new_name] = new_method
-            st.success(f"Saved {new_name} to the vault!")
+            st.success(f"Saved {new_name}!")
 
-if st.session_state['custom_recipes']:
-    view_custom = st.selectbox("View Custom Recipes:", ["Select..."] + list(st.session_state['custom_recipes'].keys()))
-    if view_custom != "Select...":
-        st.info(f"**Instructions for {view_custom}:**\n\n{st.session_state['custom_recipes'][view_custom]}")
-
-# --- WEEKLY PLANNER & GROCERY BRIDGE ---
+# --- 7. SMART WEEKLY PLANNER ---
 st.divider()
-st.header("📋 Weekly Planner & Shopping")
-with st.expander("🛒 Manage Weekly Essentials"):
-    new_essential = st.text_input("Add New Essential")
-    if st.button("Add to List"):
-        st.session_state['essentials'].append(new_essential)
-    st.write(f"**Current Essentials:** {', '.join(st.session_state['essentials'])}")
+st.header("📅 Smart Weekly Planner")
+days = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"]
+# Combine all possible recipes into one list for the dropdowns
+all_options = ["None"] + sorted(list(ingredients_map.keys())) + sorted(list(st.session_state['custom_recipes'].keys()))
 
-col1, col2 = st.columns(2)
-with col1:
-    mon, tue, wed = st.text_input("Mon Dinner"), st.text_input("Tue Dinner"), st.text_input("Wed Dinner")
-with col2:
-    thu, fri, sat = st.text_input("Thu Dinner"), st.text_input("Fri Dinner"), st.text_input("Sat Dinner")
-sun = st.text_input("Sun Dinner")
+planned_meals = {}
+for day in days:
+    with st.expander(f"📍 {day} Meals"):
+        b = st.selectbox(f"Breakfast ({day})", all_options, key=f"b_{day}")
+        l = st.selectbox(f"Lunch ({day})", all_options, key=f"l_{day}")
+        d = st.selectbox(f"Dinner ({day})", all_options, key=f"d_{day}")
+        planned_meals[day] = [b, l, d]
+
+# --- 8. GROCERY GENERATOR ---
+st.divider()
+st.header("🛒 Shopping List Bridge")
+with st.expander("📝 Manage Weekly Essentials"):
+    new_ess = st.text_input("Add Essential Item")
+    if st.button("Add to Essentials"):
+        st.session_state['essentials'].append(new_ess)
+    st.write(f"Common items: {', '.join(st.session_state['essentials'])}")
 
 if st.button("🚀 Generate 'Our Groceries' List"):
-    full_list = st.session_state['essentials'] + [mon, tue, wed, thu, fri, sat, sun]
-    clean_list = [item for item in full_list if item.strip()]
-    st.subheader("Your Shopping List")
-    st.code("\n".join(clean_list))
-    st.success("Copy the list above and paste it into 'Our Groceries'!")
+    shopping_set = set(st.session_state['essentials'])
+    for day in planned_meals:
+        for meal in planned_meals[day]:
+            if meal in ingredients_map:
+                for item in ingredients_map[meal]:
+                    shopping_set.add(item)
+            elif meal in st.session_state['custom_recipes']:
+                shopping_set.add(f"Check Vault for: {meal}")
+    
+    st.subheader("Your Copy-Paste List")
+    final_list = sorted([i for i in shopping_set if i != "None"])
+    st.code("\n".join(final_list))
+    st.success("Paste this into the 'Our Groceries' app!")
 
-# --- MASTER COOKBOOK ---
-st.divider()
-st.header("📖 Master Cookbook")
-diet = st.radio("Diet Plan:", ["Keto (Diabetes Focus)", "Mediterranean (BP Focus)"])
-meal_time = st.selectbox("Meal Type:", ["Breakfast", "Lunch", "Dinner"])
-
-recipe_db = {
-    "Keto (Diabetes Focus)": {
-        "Breakfast": {"Bacon & Egg Cups": "https://www.dietdoctor.com/recipes/keto-bacon-and-egg-cups", "Salmon Avocado Smash": "https://www.ketofocus.com/recipes/keto-avocado-toast/", "Pork Sausage Scramble": "https://www.ruled.me/sausage-spinach-feta-omelette/", "Beef Mince Omelette": "https://diethood.com/ground-beef-omelet/", "Steak and Eggs": "https://www.dietdoctor.com/recipes/keto-steak-and-eggs", "Pork Belly & Eggs": "https://www.fatforweightloss.com.au/crispy-pork-belly/", "Bulletproof Coffee": "https://www.bulletproof.com/recipes/bulletproof-diet-recipes/bulletproof-coffee-official-recipe/", "Chicken Frittata": "https://www.lowcarbmaven.com/chicken-spinach-frittata/", "Smoked Salmon Scramble": "https://www.dietdoctor.com/recipes/keto-smoked-salmon-scrambled-eggs", "Ham & Cheese Muffins": "https://www.allrecipes.com/recipe/221081/ham-and-egg-muffins/"},
-        "Lunch": {"Chicken Caesar": "https://www.dietdoctor.com/recipes/keto-chicken-caesar-salad", "Pork Belly Slaw": "https://www.ruled.me/keto-pork-belly-cabbage-slaw/", "Beef Taco Wraps": "https://www.dietdoctor.com/recipes/keto-beef-tacos", "Salmon Salad Bowls": "https://www.wholesomeyum.com/recipes/keto-salmon-salad/", "Bunless Burgers": "https://www.dietdoctor.com/recipes/the-keto-burger", "Chicken Cucumber Boats": "https://www.dietdoctor.com/recipes/keto-chicken-salad-with-cucumber", "Cold Pork Roast": "https://www.dietdoctor.com/recipes/pork-roast-with-crackling", "Beef Meatballs": "https://www.ruled.me/keto-beef-meatballs/", "Tuna Avocado Salad": "https://www.dietdoctor.com/recipes/keto-tuna-salad-with-avocado", "Pork Rind Chicken": "https://www.ruled.me/keto-pork-rind-crusted-chicken/"},
-        "Dinner": {"Garlic Butter Salmon": "https://www.dietdoctor.com/recipes/pan-seared-salmon-with-garlic-butter", "Beef & Broccoli": "https://www.dietdoctor.com/recipes/keto-beef-and-broccoli-stir-fry", "Parmesan Pork Chops": "https://www.dietdoctor.com/recipes/keto-pork-chops-with-creamy-garlic-sauce", "Chicken Thighs": "https://www.dietdoctor.com/recipes/keto-roasted-chicken-thighs-with-zucchini", "Baked White Fish": "https://www.dietdoctor.com/recipes/keto-baked-white-fish-with-lemon-and-butter", "Pork Stir-fry": "https://www.dietdoctor.com/recipes/keto-pork-stir-fry", "Steak & Mushrooms": "https://www.dietdoctor.com/recipes/keto-steak-with-garlic-mushrooms", "Lemon Pepper Wings": "https://www.dietdoctor.com/recipes/keto-chicken-wings-with-lemon-pepper", "Shepherd’s Pie": "https://www.dietdoctor.com/recipes/keto-shepherds-pie", "Pork Loin Roast": "https://www.dietdoctor.com/recipes/keto-roast-pork-loin"}
-    },
-    "Mediterranean (BP Focus)": {
-        "Breakfast": {"Greek Omelette": "https://www.themediterraneandish.com/greek-omelet-recipe/", "Avocado Sourdough": "https://www.themediterraneandish.com/avocado-toast-recipe/", "Yogurt & Walnuts": "https://www.olivetomato.com/greek-yogurt-with-honey-and-walnuts/", "Berry Oats": "https://www.themediterraneandish.com/overnight-oats-recipe/", "Salmon & Feta": "https://www.olivetomato.com/smoked-salmon-and-feta-breakfast/", "Spinach Frittata": "https://www.themediterraneandish.com/spinach-frittata-recipe/", "Whole Wheat Pancakes": "https://www.themediterraneandish.com/healthy-pancakes-recipe/", "Chickpea Hash": "https://www.themediterraneandish.com/chickpea-hash-recipe/", "Poached Eggs": "https://www.olivetomato.com/mediterranean-poached-eggs/", "Cottage Cheese & Cucumber": "https://www.eatingwell.com/recipe/267868/cottage-cheese-with-cucumber-tomato/"},
-        "Lunch": {"Chickpea Tuna Salad": "https://www.olivetomato.com/5-minute-mediterranean-chickpea-tuna-salad/", "Classic Greek Salad": "https://www.themediterraneandish.com/traditional-greek-salad-recipe/", "Chicken Hummus Wrap": "https://www.themediterraneandish.com/chicken-hummus-wrap-recipe/", "Quinoa Salad": "https://www.themediterraneandish.com/mediterranean-quinoa-salad-recipe/", "Lentil Soup": "https://www.themediterraneandish.com/red-lentil-soup-recipe/", "Salmon Souvlaki": "https://www.themediterraneandish.com/salmon-souvlaki-salad/", "Beef Skewers": "https://www.themediterraneandish.com/beef-kabobs-recipe/", "Pork Wraps": "https://www.themediterraneandish.com/pork-souvlaki-recipe/", "Quinoa Tabbouleh": "https://www.themediterraneandish.com/tabbouleh-recipe/", "Tuna Salad (No Mayo)": "https://www.themediterraneandish.com/mediterranean-tuna-salad/"},
-        "Dinner": {"Greek Lemon Fish": "https://www.themediterraneandish.com/baked-fish-recipe-mediterranean-style/", "Chicken Cacciatore": "https://www.themediterraneandish.com/chicken-cacciatore-recipe/", "Baked Salmon": "https://www.themediterraneandish.com/easy-baked-salmon-recipe-mediterranean-style/", "Pork Souvlaki": "https://www.themediterraneandish.com/pork-souvlaki-recipe/", "Beef & Veg Kebabs": "https://www.themediterraneandish.com/beef-kabobs-recipe/", "Garlic Chicken": "https://www.themediterraneandish.com/mediterranean-garlic-chicken/", "Pasta Primavera": "https://www.eatingwell.com/recipe/250233/pasta-primavera/", "Sheet Pan Pork": "https://www.themediterraneandish.com/sheet-pan-pork-chops-vegetables/", "Grilled Beef": "https://www.olivetomato.com/mediterranean-grilled-steak-with-asparagus/", "Tuna Niçoise": "https://www.themediterraneandish.com/nicoise-salad-recipe/"}
-    }
-}
-
-options = recipe_db[diet][meal_time]
-choice = st.selectbox(f"Choose a {meal_time} recipe:", list(options.keys()))
-st.success(f"### [👉 Click here for {choice} Recipe]({options[choice]})")
-
-# --- VITALS TRACKER ---
+# --- 9. VITALS TRACKER ---
 st.divider()
 st.header("📊 Vitals & Accountability")
 c1, c2 = st.columns(2)
@@ -132,4 +174,4 @@ with c2:
 
 if st.button("Log Stats"):
     st.balloons()
-    st.write(f"🌟 **Good on ya, {user}!** Data captured. Let's keep those numbers steady for August!")
+    st.write(f"🌟 Data captured for {user}. Let's stay on track!")
