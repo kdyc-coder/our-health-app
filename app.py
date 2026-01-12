@@ -18,21 +18,55 @@ st.sidebar.info(f"🗓️ {r_days:,} Days to Retirement")
 st.title("🎋 Keifer & Vonnie's Command Centre")
 user = st.radio("Who is checking in?", ["Keifer", "Vonnie"])
 
-# --- EXERCISE HUB ---
-with st.expander("💪 Exercise & Joint Support", expanded=False):
+# --- WEEKLY MEAL PLANNER ---
+st.header("📋 Weekly Meal Planner")
+st.info("Plan your 7 Dinners here before you head to the shops!")
+with st.container():
+    mon = st.text_input("Monday", "e.g., Garlic Butter Salmon")
+    tue = st.text_input("Tuesday")
+    wed = st.text_input("Wednesday")
+    thu = st.text_input("Thursday")
+    fri = st.text_input("Friday")
+    sat = st.text_input("Saturday")
+    sun = st.text_input("Sunday")
+    
+    if st.button("Generate Shopping Plan Summary"):
+        plan_text = f"Mon: {mon}, Tue: {tue}, Wed: {wed}, Thu: {thu}, Fri: {fri}, Sat: {sat}, Sun: {sun}"
+        st.code(plan_text)
+        st.write("👆 You can copy this text into your phone notes for the supermarket!")
+
+# --- EXERCISE & STRENGTH HUB ---
+st.divider()
+st.header("💪 Exercise & Home Strength")
+with st.expander("🧘 Tai Chi Walking (Low Impact)", expanded=False):
     st.video("https://www.youtube.com/watch?v=38tqFjB-o-g")
     if user == "Vonnie":
-        st.warning("🦶 **Vonnie's Foot Care:** Roll your foot over a cold bottle after walking. Focus on the 'Heel-Arch-Toe' roll.")
-    st.markdown("**Tai Chi Walking:** Slow weight transfer, soft knees, and level hips.")
+        st.warning("🦶 **Vonnie's Foot Care:** Focus on the 'Roll' (Heel-Arch-Toe). Calf raises are your best friend today!")
+    st.markdown("""
+    **Form Check:**
+    - **The Pour:** Weight transfer is slow—like pouring tea.
+    - **The Roll:** Heel -> Arch -> Toe. 
+    - **Soft Knees:** Keep a micro-bend to save the joints.
+    """)
+    
+
+with st.expander("🏋️ Home Resistance Routine", expanded=False):
+    st.markdown("""
+    **Do these 2-3 times a week (Joint Friendly):**
+    1. **Wall Push-ups:** (10 reps) Easy on shoulders, builds chest.
+    2. **Chair Squats:** (10 reps) Sit and stand without using hands.
+    3. **Counter-top Lunges:** Hold the bench for balance. Very shallow.
+    4. **Calf Raises:** (15 reps) Vital for Vonnie's Plantar Fasciitis.
+    """)
     
 
 # --- THE BIG COOKBOOK ---
 st.divider()
-st.header("📖 The Digital Cookbook (60+ Options)")
+st.header("📖 The Digital Cookbook")
 diet = st.radio("Select Diet Plan:", ["Keto (Diabetes Focus)", "Mediterranean (BP Focus)"])
 meal_time = st.selectbox("Meal Type:", ["Breakfast", "Lunch", "Dinner"])
 
-# FULL RECIPE DATABASE
+# FULL RECIPE DATABASE (Abbreviated here for space, but include all 60 links in your file)
 recipe_db = {
     "Keto (Diabetes Focus)": {
         "Breakfast": {
@@ -112,12 +146,9 @@ recipe_db = {
     }
 }
 
-# Display logic
 current_options = recipe_db[diet][meal_time]
-choice = st.selectbox(f"Choose one of your 10 {meal_time} options:", list(current_options.keys()))
-
-st.success(f"### [👉 Click here for the full {choice} Recipe & Instructions]({current_options[choice]})")
-st.info("This link will show you the exact quantities (servings) and step-by-step methods.")
+choice = st.selectbox(f"Choose a {meal_time} recipe:", list(current_options.keys()))
+st.success(f"### [👉 Click here for {choice} Recipe]({current_options[choice]})")
 
 # --- VITALS TRACKER ---
 st.divider()
@@ -132,4 +163,4 @@ with c2:
 
 if st.button("Log Stats"):
     st.balloons()
-    st.write(f"🌟 **Genuine Praise:** Great work, {user}! You're building the habit. Only {m_days} days to the Medical!")
+    st.write(f"🌟 **Genuine Praise:** Good on ya, {user}! Numbers are in. Stay focused on August!")
