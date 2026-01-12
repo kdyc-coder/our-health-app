@@ -23,21 +23,38 @@ user = st.radio("Who is checking in?", ["Keifer", "Vonnie"])
 # --- EXERCISE HUB (Tai Chi + Resistance) ---
 st.divider()
 st.header("💪 Exercise & Joint Support")
-with st.expander("🧘 Tai Chi Walking & Home Strength Routine"):
-    st.subheader("1. Tai Chi Focus")
-    st.video("https://www.youtube.com/watch?v=38tqFjB-o-g")
-    if user == "Vonnie":
-        st.warning("🦶 **Vonnie's Foot Care:** Focus on the 'Roll' (Heel-Arch-Toe). Calf raises are your best friend today!")
+with st.expander("🧘 Tai Chi & Resistance Training"):
     
-    st.subheader("2. Home Resistance Circuit")
+    st.subheader("1. Tai Chi Walking (Manual Guide)")
     st.markdown("""
-    **Perform this circuit 2-3 times per week to build muscle for the medical:**
+    **The 'Heel-to-Toe' Roll:**
+    * **Step 1:** Lift one foot and place the **heel** down lightly. Keep your weight on the back leg.
+    * **Step 2:** Slowly shift your weight forward, rolling through the **arch** to the **ball** of the foot.
+    * **Step 3:** Push off gently with the back foot. 
+    * *Note: This reduces impact on the joints and is excellent for Vonnie's foot recovery.*
+    """)
+    st.video("https://www.youtube.com/watch?v=38tqFjB-o-g")
+
+    st.subheader("2. Daily Strength Checklist")
+    st.write("Complete these moves 2-3 times per week:")
     
-    * **Wall Push-ups (Chest/Arms):** Stand arm's length from a wall. Place hands flat. Lower your chest toward the wall and push back. *Easier on shoulders than floor push-ups.*
-    * **Chair Squats (Legs/Glutes):** Stand in front of a sturdy chair. Lower your hips until you just touch the seat, then stand back up. *No hands if you can!*
-    * **Calf Raises (Lower Leg/Foot Health):** Hold a wall for balance. Rise onto your toes, hold for 1 second, then lower. *Crucial for Vonnie's plantar fasciitis.*
-    * **Counter-top Rows (Back):** Hold the edge of a heavy table or kitchen counter. Lean back slightly with straight arms, then pull your chest toward the counter.
-    * **The 'Medical Walk':** 10 minutes of brisk walking, focusing on deep breathing and upright posture.
+    col_a, col_b = st.columns(2)
+    with col_a:
+        ex1 = st.checkbox("Wall Push-ups (10 reps)")
+        ex2 = st.checkbox("Chair Squats (10 reps)")
+    with col_b:
+        ex3 = st.checkbox("Calf Raises (15 reps)")
+        ex4 = st.checkbox("Counter-top Rows (10 reps)")
+    
+    if ex1 and ex2 and ex3 and ex4:
+        st.success("🔥 Full Circuit Complete! Nice work!")
+
+    st.markdown("""
+    **Exercise Descriptions:**
+    * **Wall Push-ups:** Hands flat on wall, lower chest, push back.
+    * **Chair Squats:** Sit-to-stand from a sturdy chair without using hands.
+    * **Calf Raises:** Rise onto toes while holding a wall for balance.
+    * **Counter Rows:** Pull your chest toward the kitchen counter edge while leaning back.
     """)
 
 # --- THE FAMILY VAULT (Custom Recipes) ---
